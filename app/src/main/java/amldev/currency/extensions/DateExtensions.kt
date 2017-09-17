@@ -10,6 +10,13 @@ import kotlin.collections.ArrayList
  */
 object DateTime {
 
+    enum class DifferenceUnit{
+        DAYS,
+        HOURS,
+        MINUTES,
+        SECONDS
+    }
+    
     private val ALL_DATA_FORMAT = "yyyy-MM-dd"
     private val ALL_DATA_WITH_TIME_FORMAT = "${ALL_DATA_FORMAT} HH:mm:ss"
     val currentData: String
@@ -125,4 +132,24 @@ object DateTime {
         }
         return format_data
     }
+    
+    fun getDateDiff(startDate: String, endDate: String, unit: DifferenceUnit): Long {
+        try {
+            val format = SimpleDateFormat(ALL_DATA_WITH_TIME_FORMAT, Locale.ENGLISH)
+            val result =
+                when(unit) {
+                    DifferenceUnit.DAYS ->  TimeUnit.DAYS.convert(format.parse(endDate).time - format.parse(startDate).time, TimeUnit.MILLISECONDS)
+                    DifferenceUnit.HOURS ->  TimeUnit.HOURS.convert(format.parse(endDate).time - format.parse(startDate).time, TimeUnit.MILLISECONDS)
+                    DifferenceUnit.MINUTES ->  TimeUnit.MINUTES.convert(format.parse(endDate).time - format.parse(startDate).time, TimeUnit.MILLISECONDS)
+                    DifferenceUnit.SECONDS ->  TimeUnit.SECONDS.convert(format.parse(endDate).time - format.parse(startDate).time, TimeUnit.MILLISECONDS)
+                }
+            
+            return result
+            
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return 0
+        }
+    }
+    
 }
